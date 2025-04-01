@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CardElement, useStripe, useElements } from '@stripe/stripe-js';
+import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import StripeService, { Course } from '../services/StripeService';
 import WalletService, { WalletBalance } from '../services/WalletService';
 import { InjectedConnector } from '@web3-react/injected-connector';
@@ -11,6 +11,8 @@ interface PaymentModalProps {
 }
 
 const PaymentModal: React.FC<PaymentModalProps> = ({ course, onClose, onSuccess }) => {
+  console.log('PaymentModal rendered for course:', course);
+  
   const stripe = useStripe();
   const elements = useElements();
   const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'wallet'>('stripe');

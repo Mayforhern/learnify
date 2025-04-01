@@ -15,6 +15,8 @@ import Certificates from './components/Certificates';
 import Dashboard from './components/Dashboard';
 import { initializeDatabase } from './services/initDatabase';
 import CoursesPage from './components/CoursesPage';
+import CertificateValidation from './pages/CertificateValidation';
+import TestCertificate from './components/TestCertificate';
 
 interface Course {
   id: number;
@@ -383,6 +385,8 @@ const App = () => {
           <Route path="/certificates" element={<Certificates />} />
           <Route path="/settings" element={<div className="p-8"><h1>Settings Page</h1></div>} />
           <Route path="/blog" element={<div className="p-8"><h1>Blog Page</h1></div>} />
+          <Route path="/validate-certificate/:certificateId" element={<CertificateValidation />} />
+          <Route path="/test-certificate" element={<TestCertificate />} />
         </Routes>
 
         <FooterWrapper />
