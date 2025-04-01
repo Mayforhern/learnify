@@ -168,6 +168,486 @@ const CourseList = () => {
           </g>
         </svg>
       )
+    },
+    {
+      id: 6,
+      title: 'Spanish Language Mastery: From Beginner to Fluent',
+      category: 'Language Learning',
+      instructor: 'Maria Garcia',
+      rating: 4.9,
+      studentsCount: 15680,
+      duration: '48h 30m',
+      level: 'Beginner',
+      price: 79.99,
+      originalPrice: 159.99,
+      tags: ['Spanish', 'Grammar', 'Conversation', 'Culture'],
+      lastUpdated: 'March 2024',
+      backgroundColor: '#F0FDF4',
+      illustration: (
+        <svg width="100%" height="100%" viewBox="0 0 200 200">
+          <g transform="translate(40, 40)">
+            <path d="M10 80 L30 40 L50 60 L70 20 L90 40" stroke="#16A34A" strokeWidth="2" fill="none"/>
+            <circle cx="30" cy="40" r="4" fill="#16A34A"/>
+            <circle cx="50" cy="60" r="4" fill="#16A34A"/>
+            <circle cx="70" cy="20" r="4" fill="#16A34A"/>
+          </g>
+        </svg>
+      )
+    },
+    {
+      id: 7,
+      title: 'Photography Fundamentals: Master Your Camera',
+      category: 'Design',
+      instructor: 'John Smith',
+      rating: 4.7,
+      studentsCount: 8920,
+      duration: '24h 45m',
+      level: 'Beginner',
+      price: 69.99,
+      originalPrice: 139.99,
+      tags: ['Photography', 'Camera', 'Composition', 'Lighting'],
+      lastUpdated: 'March 2024',
+      backgroundColor: '#EFF6FF',
+      illustration: (
+        <svg width="100%" height="100%" viewBox="0 0 200 200">
+          <g transform="translate(40, 40)">
+            <circle cx="50" cy="50" r="30" fill="none" stroke="#2563EB" strokeWidth="2"/>
+            <path d="M35 50 L65 50 M50 35 L50 65" stroke="#2563EB" strokeWidth="2"/>
+          </g>
+        </svg>
+      )
+    },
+    {
+      id: 8,
+      title: 'Advanced Calculus & Mathematical Analysis',
+      category: 'Mathematics',
+      instructor: 'Prof. David Wilson',
+      rating: 4.8,
+      studentsCount: 4560,
+      duration: '36h 20m',
+      level: 'Advanced',
+      price: 94.99,
+      originalPrice: 189.99,
+      tags: ['Calculus', 'Analysis', 'Mathematics', 'Theory'],
+      lastUpdated: 'March 2024',
+      backgroundColor: '#FDF2F8',
+      illustration: (
+        <svg width="100%" height="100%" viewBox="0 0 200 200">
+          <g transform="translate(40, 40)">
+            <rect width="80" height="60" fill="none" stroke="#DB2777" strokeWidth="2" rx="4"/>
+            <path d="M20 30 L60 30 M20 40 L40 40" stroke="#DB2777" strokeWidth="2"/>
+          </g>
+        </svg>
+      )
+    },
+    {
+      id: 9,
+      title: 'Business Strategy & Leadership Development',
+      category: 'Business',
+      instructor: 'Dr. Emily Brown',
+      rating: 4.9,
+      studentsCount: 11240,
+      duration: '28h 15m',
+      level: 'Intermediate',
+      price: 84.99,
+      originalPrice: 169.99,
+      tags: ['Strategy', 'Leadership', 'Management', 'Business'],
+      lastUpdated: 'March 2024',
+      backgroundColor: '#F3F0FF',
+      illustration: (
+        <svg width="100%" height="100%" viewBox="0 0 200 200">
+          <g transform="translate(40, 40)">
+            <rect width="100" height="80" fill="none" stroke="#6B46C1" strokeWidth="2" rx="4"/>
+            <path d="M20 40 L40 20 L60 40 L80 10" stroke="#6B46C1" strokeWidth="2" fill="none"/>
+            <circle cx="40" cy="20" r="4" fill="#6B46C1"/>
+            <circle cx="60" cy="40" r="4" fill="#6B46C1"/>
+          </g>
+        </svg>
+      )
+    },
+    {
+      id: 10,
+      title: 'Content Writing & SEO Mastery',
+      category: 'Marketing',
+      instructor: 'Lisa Johnson',
+      rating: 4.7,
+      studentsCount: 7840,
+      duration: '20h 30m',
+      level: 'Beginner',
+      price: 74.99,
+      originalPrice: 149.99,
+      tags: ['Writing', 'SEO', 'Content', 'Marketing'],
+      lastUpdated: 'March 2024',
+      backgroundColor: '#FFEDD5',
+      illustration: (
+        <svg width="100%" height="100%" viewBox="0 0 200 200">
+          <g transform="translate(40, 40)">
+            <rect width="90" height="60" fill="none" stroke="#EA580C" strokeWidth="2" rx="8"/>
+            <circle cx="45" cy="30" r="15" fill="#EA580C"/>
+            <rect x="70" y="20" width="10" height="20" fill="#EA580C" rx="2"/>
+          </g>
+        </svg>
+      )
+    },
+    {
+      id: 11,
+      title: 'Mobile App Development with React Native',
+      category: 'Computer Science',
+      instructor: 'Alex Kumar',
+      rating: 4.8,
+      studentsCount: 9340,
+      duration: '40h 15m',
+      level: 'Intermediate',
+      price: 89.99,
+      originalPrice: 179.99,
+      tags: ['React Native', 'Mobile', 'JavaScript', 'Development'],
+      lastUpdated: 'March 2024',
+      backgroundColor: '#F0FDF4',
+      illustration: (
+        <svg width="100%" height="100%" viewBox="0 0 200 200">
+          <g transform="translate(40, 40)">
+            <path d="M10 80 L30 40 L50 60 L70 20 L90 40" stroke="#16A34A" strokeWidth="2" fill="none"/>
+            <circle cx="30" cy="40" r="4" fill="#16A34A"/>
+            <circle cx="50" cy="60" r="4" fill="#16A34A"/>
+            <circle cx="70" cy="20" r="4" fill="#16A34A"/>
+          </g>
+        </svg>
+      )
+    },
+    {
+      id: 12,
+      title: 'Personal Finance & Investment Planning',
+      category: 'Personal Development',
+      instructor: 'Michael Roberts',
+      rating: 4.9,
+      studentsCount: 15680,
+      duration: '24h 45m',
+      level: 'Beginner',
+      price: 69.99,
+      originalPrice: 139.99,
+      tags: ['Finance', 'Investment', 'Planning', 'Money'],
+      lastUpdated: 'March 2024',
+      backgroundColor: '#EFF6FF',
+      illustration: (
+        <svg width="100%" height="100%" viewBox="0 0 200 200">
+          <g transform="translate(40, 40)">
+            <circle cx="50" cy="50" r="30" fill="none" stroke="#2563EB" strokeWidth="2"/>
+            <path d="M35 50 L65 50 M50 35 L50 65" stroke="#2563EB" strokeWidth="2"/>
+          </g>
+        </svg>
+      )
+    },
+    {
+      id: 13,
+      title: 'Advanced UI/UX Design Principles',
+      category: 'Design',
+      instructor: 'Sarah Wilson',
+      rating: 4.8,
+      studentsCount: 6780,
+      duration: '32h 30m',
+      level: 'Advanced',
+      price: 94.99,
+      originalPrice: 189.99,
+      tags: ['UI/UX', 'Design', 'Principles', 'Advanced'],
+      lastUpdated: 'March 2024',
+      backgroundColor: '#FDF2F8',
+      illustration: (
+        <svg width="100%" height="100%" viewBox="0 0 200 200">
+          <g transform="translate(40, 40)">
+            <rect width="80" height="60" fill="none" stroke="#DB2777" strokeWidth="2" rx="4"/>
+            <path d="M20 30 L60 30 M20 40 L40 40" stroke="#DB2777" strokeWidth="2"/>
+          </g>
+        </svg>
+      )
+    },
+    {
+      id: 14,
+      title: 'Digital Marketing Analytics & Strategy',
+      category: 'Marketing',
+      instructor: 'Emma Thompson',
+      rating: 4.7,
+      studentsCount: 8920,
+      duration: '28h 15m',
+      level: 'Intermediate',
+      price: 79.99,
+      originalPrice: 159.99,
+      tags: ['Analytics', 'Marketing', 'Strategy', 'Digital'],
+      lastUpdated: 'March 2024',
+      backgroundColor: '#F3F0FF',
+      illustration: (
+        <svg width="100%" height="100%" viewBox="0 0 200 200">
+          <g transform="translate(40, 40)">
+            <rect width="100" height="80" fill="none" stroke="#6B46C1" strokeWidth="2" rx="4"/>
+            <path d="M20 40 L40 20 L60 40 L80 10" stroke="#6B46C1" strokeWidth="2" fill="none"/>
+            <circle cx="40" cy="20" r="4" fill="#6B46C1"/>
+            <circle cx="60" cy="40" r="4" fill="#6B46C1"/>
+          </g>
+        </svg>
+      )
+    },
+    {
+      id: 15,
+      title: 'Advanced Python Programming',
+      category: 'Computer Science',
+      instructor: 'Dr. James Wilson',
+      rating: 4.9,
+      studentsCount: 12420,
+      duration: '36h 45m',
+      level: 'Advanced',
+      price: 89.99,
+      originalPrice: 179.99,
+      tags: ['Python', 'Programming', 'Advanced', 'Development'],
+      lastUpdated: 'March 2024',
+      backgroundColor: '#FFEDD5',
+      illustration: (
+        <svg width="100%" height="100%" viewBox="0 0 200 200">
+          <g transform="translate(40, 40)">
+            <rect width="90" height="60" fill="none" stroke="#EA580C" strokeWidth="2" rx="8"/>
+            <circle cx="45" cy="30" r="15" fill="#EA580C"/>
+            <rect x="70" y="20" width="10" height="20" fill="#EA580C" rx="2"/>
+          </g>
+        </svg>
+      )
+    },
+    {
+      id: 16,
+      title: 'Business Analytics & Data Visualization',
+      category: 'Business',
+      instructor: 'Prof. Rachel Chen',
+      rating: 4.8,
+      studentsCount: 7840,
+      duration: '32h 30m',
+      level: 'Intermediate',
+      price: 84.99,
+      originalPrice: 169.99,
+      tags: ['Analytics', 'Data', 'Business', 'Visualization'],
+      lastUpdated: 'March 2024',
+      backgroundColor: '#F0FDF4',
+      illustration: (
+        <svg width="100%" height="100%" viewBox="0 0 200 200">
+          <g transform="translate(40, 40)">
+            <path d="M10 80 L30 40 L50 60 L70 20 L90 40" stroke="#16A34A" strokeWidth="2" fill="none"/>
+            <circle cx="30" cy="40" r="4" fill="#16A34A"/>
+            <circle cx="50" cy="60" r="4" fill="#16A34A"/>
+            <circle cx="70" cy="20" r="4" fill="#16A34A"/>
+          </g>
+        </svg>
+      )
+    },
+    {
+      id: 17,
+      title: 'Creative Writing & Storytelling',
+      category: 'Personal Development',
+      instructor: 'David Miller',
+      rating: 4.7,
+      studentsCount: 4560,
+      duration: '24h 15m',
+      level: 'Beginner',
+      price: 69.99,
+      originalPrice: 139.99,
+      tags: ['Writing', 'Creative', 'Storytelling', 'Fiction'],
+      lastUpdated: 'March 2024',
+      backgroundColor: '#EFF6FF',
+      illustration: (
+        <svg width="100%" height="100%" viewBox="0 0 200 200">
+          <g transform="translate(40, 40)">
+            <circle cx="50" cy="50" r="30" fill="none" stroke="#2563EB" strokeWidth="2"/>
+            <path d="M35 50 L65 50 M50 35 L50 65" stroke="#2563EB" strokeWidth="2"/>
+          </g>
+        </svg>
+      )
+    },
+    {
+      id: 18,
+      title: 'Advanced Web Security & Penetration Testing',
+      category: 'Computer Science',
+      instructor: 'Chris Anderson',
+      rating: 4.9,
+      studentsCount: 6780,
+      duration: '40h 30m',
+      level: 'Advanced',
+      price: 99.99,
+      originalPrice: 199.99,
+      tags: ['Security', 'Web', 'Penetration', 'Testing'],
+      lastUpdated: 'March 2024',
+      backgroundColor: '#FDF2F8',
+      illustration: (
+        <svg width="100%" height="100%" viewBox="0 0 200 200">
+          <g transform="translate(40, 40)">
+            <rect width="80" height="60" fill="none" stroke="#DB2777" strokeWidth="2" rx="4"/>
+            <path d="M20 30 L60 30 M20 40 L40 40" stroke="#DB2777" strokeWidth="2"/>
+          </g>
+        </svg>
+      )
+    },
+    {
+      id: 19,
+      title: 'Digital Art & Illustration Fundamentals',
+      category: 'Design',
+      instructor: 'Sophie Chen',
+      rating: 4.8,
+      studentsCount: 8920,
+      duration: '28h 45m',
+      level: 'Beginner',
+      price: 79.99,
+      originalPrice: 159.99,
+      tags: ['Art', 'Digital', 'Illustration', 'Design'],
+      lastUpdated: 'March 2024',
+      backgroundColor: '#F3F0FF',
+      illustration: (
+        <svg width="100%" height="100%" viewBox="0 0 200 200">
+          <g transform="translate(40, 40)">
+            <rect width="100" height="80" fill="none" stroke="#6B46C1" strokeWidth="2" rx="4"/>
+            <path d="M20 40 L40 20 L60 40 L80 10" stroke="#6B46C1" strokeWidth="2" fill="none"/>
+            <circle cx="40" cy="20" r="4" fill="#6B46C1"/>
+            <circle cx="60" cy="40" r="4" fill="#6B46C1"/>
+          </g>
+        </svg>
+      )
+    },
+    {
+      id: 20,
+      title: 'Social Media Marketing & Brand Building',
+      category: 'Marketing',
+      instructor: 'Lisa Thompson',
+      rating: 4.7,
+      studentsCount: 11240,
+      duration: '24h 30m',
+      level: 'Intermediate',
+      price: 74.99,
+      originalPrice: 149.99,
+      tags: ['Social Media', 'Marketing', 'Brand', 'Strategy'],
+      lastUpdated: 'March 2024',
+      backgroundColor: '#FFEDD5',
+      illustration: (
+        <svg width="100%" height="100%" viewBox="0 0 200 200">
+          <g transform="translate(40, 40)">
+            <rect width="90" height="60" fill="none" stroke="#EA580C" strokeWidth="2" rx="8"/>
+            <circle cx="45" cy="30" r="15" fill="#EA580C"/>
+            <rect x="70" y="20" width="10" height="20" fill="#EA580C" rx="2"/>
+          </g>
+        </svg>
+      )
+    },
+    {
+      id: 21,
+      title: 'Advanced JavaScript & Modern Frameworks',
+      category: 'Computer Science',
+      instructor: 'Alex Johnson',
+      rating: 4.9,
+      studentsCount: 9340,
+      duration: '36h 15m',
+      level: 'Advanced',
+      price: 89.99,
+      originalPrice: 179.99,
+      tags: ['JavaScript', 'Frameworks', 'Web', 'Development'],
+      lastUpdated: 'March 2024',
+      backgroundColor: '#F0FDF4',
+      illustration: (
+        <svg width="100%" height="100%" viewBox="0 0 200 200">
+          <g transform="translate(40, 40)">
+            <path d="M10 80 L30 40 L50 60 L70 20 L90 40" stroke="#16A34A" strokeWidth="2" fill="none"/>
+            <circle cx="30" cy="40" r="4" fill="#16A34A"/>
+            <circle cx="50" cy="60" r="4" fill="#16A34A"/>
+            <circle cx="70" cy="20" r="4" fill="#16A34A"/>
+          </g>
+        </svg>
+      )
+    },
+    {
+      id: 22,
+      title: 'Business Communication & Public Speaking',
+      category: 'Personal Development',
+      instructor: 'Michael Brown',
+      rating: 4.8,
+      studentsCount: 7840,
+      duration: '20h 45m',
+      level: 'Beginner',
+      price: 69.99,
+      originalPrice: 139.99,
+      tags: ['Communication', 'Public Speaking', 'Business', 'Skills'],
+      lastUpdated: 'March 2024',
+      backgroundColor: '#EFF6FF',
+      illustration: (
+        <svg width="100%" height="100%" viewBox="0 0 200 200">
+          <g transform="translate(40, 40)">
+            <circle cx="50" cy="50" r="30" fill="none" stroke="#2563EB" strokeWidth="2"/>
+            <path d="M35 50 L65 50 M50 35 L50 65" stroke="#2563EB" strokeWidth="2"/>
+          </g>
+        </svg>
+      )
+    },
+    {
+      id: 23,
+      title: 'Advanced Data Structures & Algorithms',
+      category: 'Computer Science',
+      instructor: 'Dr. Sarah Chen',
+      rating: 4.9,
+      studentsCount: 6780,
+      duration: '40h 30m',
+      level: 'Advanced',
+      price: 94.99,
+      originalPrice: 189.99,
+      tags: ['Data Structures', 'Algorithms', 'Programming', 'Advanced'],
+      lastUpdated: 'March 2024',
+      backgroundColor: '#FDF2F8',
+      illustration: (
+        <svg width="100%" height="100%" viewBox="0 0 200 200">
+          <g transform="translate(40, 40)">
+            <rect width="80" height="60" fill="none" stroke="#DB2777" strokeWidth="2" rx="4"/>
+            <path d="M20 30 L60 30 M20 40 L40 40" stroke="#DB2777" strokeWidth="2"/>
+          </g>
+        </svg>
+      )
+    },
+    {
+      id: 24,
+      title: 'Digital Photography & Photo Editing',
+      category: 'Design',
+      instructor: 'John Smith',
+      rating: 4.7,
+      studentsCount: 8920,
+      duration: '32h 15m',
+      level: 'Intermediate',
+      price: 79.99,
+      originalPrice: 159.99,
+      tags: ['Photography', 'Editing', 'Digital', 'Design'],
+      lastUpdated: 'March 2024',
+      backgroundColor: '#F3F0FF',
+      illustration: (
+        <svg width="100%" height="100%" viewBox="0 0 200 200">
+          <g transform="translate(40, 40)">
+            <rect width="100" height="80" fill="none" stroke="#6B46C1" strokeWidth="2" rx="4"/>
+            <path d="M20 40 L40 20 L60 40 L80 10" stroke="#6B46C1" strokeWidth="2" fill="none"/>
+            <circle cx="40" cy="20" r="4" fill="#6B46C1"/>
+            <circle cx="60" cy="40" r="4" fill="#6B46C1"/>
+          </g>
+        </svg>
+      )
+    },
+    {
+      id: 25,
+      title: 'Email Marketing & Automation',
+      category: 'Marketing',
+      instructor: 'Emma Wilson',
+      rating: 4.8,
+      studentsCount: 7840,
+      duration: '24h 30m',
+      level: 'Beginner',
+      price: 69.99,
+      originalPrice: 139.99,
+      tags: ['Email', 'Marketing', 'Automation', 'Strategy'],
+      lastUpdated: 'March 2024',
+      backgroundColor: '#FFEDD5',
+      illustration: (
+        <svg width="100%" height="100%" viewBox="0 0 200 200">
+          <g transform="translate(40, 40)">
+            <rect width="90" height="60" fill="none" stroke="#EA580C" strokeWidth="2" rx="8"/>
+            <circle cx="45" cy="30" r="15" fill="#EA580C"/>
+            <rect x="70" y="20" width="10" height="20" fill="#EA580C" rx="2"/>
+          </g>
+        </svg>
+      )
     }
   ];
 

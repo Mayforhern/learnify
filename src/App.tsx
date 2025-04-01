@@ -107,7 +107,7 @@ const App = () => {
   const ProfileMenu = () => {
     const navigate = useNavigate();
 
-    return (
+  return (
       <div className="relative">
         <button
           id="profile-button"
@@ -140,8 +140,8 @@ const App = () => {
             <div className="px-4 py-2 border-b border-gray-100">
               <div className="text-sm font-medium">Wallet Connected</div>
               <div className="text-sm text-gray-600">{userAddress}</div>
-            </div>
-            
+        </div>
+
             <div className="py-2">
               <Link
                 to="/dashboard"
@@ -312,7 +312,7 @@ const App = () => {
                   <div className="text-sm text-gray-600 mb-1">courses</div>
                   <div className="text-[40px] font-bold leading-none">+120</div>
                 </div>
-              </div>
+          </div>
 
               <div className="w-[280px] bg-[#FFF9E6] rounded-[24px] p-6">
                 <div className="flex items-center gap-1 text-sm font-medium">
