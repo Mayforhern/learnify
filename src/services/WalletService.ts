@@ -15,10 +15,20 @@ export interface Transaction {
   timestamp: number;
 }
 
+interface EthereumProvider {
+  request: (args: { method: string; params?: any[] }) => Promise<any>;
+}
+
+declare global {
+  interface Window {
+    ethereum?: EthereumProvider;
+  }
+}
+
 class WalletService {
   private static instance: WalletService;
-  private provider: ethers.providers.Web3Provider | null = null;
-  private signer: ethers.Signer | null = null;
+  private provider: ethers.BrowserProvider | null = null;
+  private signer: ethers.JsonRpcSigner | null = null;
 
   private constructor() {}
 
@@ -29,12 +39,28 @@ class WalletService {
     return WalletService.instance;
   }
 
+  public async isConnected(): Promise<boolean> {
+    try {
+      if (!this.provider || !this.signer) {
+        return false;
+      }
+      const address = await this.signer.getAddress();
+      return !!address;
+    } catch (error) {
+      console.error('Error checking wallet connection:', error);
+      return false;
+    }
+  }
+
   public async connect(connector: InjectedConnector) {
     try {
       await connector.activate();
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      if (!window.ethereum) {
+        throw new Error('No Ethereum provider found');
+      }
+      const provider = new ethers.BrowserProvider(window.ethereum);
       this.provider = provider;
-      this.signer = provider.getSigner();
+      this.signer = await provider.getSigner();
     } catch (error) {
       console.error('Error connecting wallet:', error);
       throw error;
@@ -61,8 +87,8 @@ class WalletService {
       }
 
       const address = await this.signer.getAddress();
-      const balance = await this.signer.getBalance();
-      const ethBalance = ethers.utils.formatEther(balance);
+      const balance = await this.provider!.getBalance(address);
+      const ethBalance = ethers.formatEther(balance);
 
       // Get ETH price in USD (you'll need to implement this)
       const ethPrice = await this.getEthPrice();
@@ -86,16 +112,26 @@ class WalletService {
 
       const tx = await this.signer.sendTransaction({
         to,
-        value: ethers.utils.parseEther(amount),
+        value: ethers.parseEther(amount),
       });
 
       const receipt = await tx.wait();
+      if (!receipt) {
+        throw new Error('Transaction failed');
+      }
+
+      // Get transaction details
+      const txResponse = await this.provider!.getTransaction(tx.hash);
+      if (!txResponse) {
+        throw new Error('Transaction not found');
+      }
+
       return {
-        hash: receipt.transactionHash,
+        hash: receipt.hash,
         from: receipt.from,
-        to: receipt.to,
-        value: ethers.utils.formatEther(receipt.value),
-        timestamp: receipt.timestamp,
+        to: receipt.to || '',
+        value: ethers.formatEther(txResponse.value),
+        timestamp: Math.floor(Date.now() / 1000), // Current timestamp as fallback
       };
     } catch (error) {
       console.error('Error sending transaction:', error);

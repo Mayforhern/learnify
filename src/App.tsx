@@ -379,7 +379,7 @@ const App = () => {
           <Route path="/degrees" element={<Degrees />} />
           <Route path="/enterprise" element={<Enterprise />} />
           <Route path="/courses" element={<CoursesPage />} />
-          <Route path="/dashboard" element={<Dashboard userAddress={userAddress} />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile userAddress={userAddress} />} />
           <Route path="/my-courses" element={<MyCourses />} />
           <Route path="/certificates" element={<Certificates />} />

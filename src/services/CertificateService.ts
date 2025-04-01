@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import DatabaseService from './DatabaseService';
+import { ethers } from 'ethers';
 
 interface CertificateData {
   id: string;
@@ -9,6 +10,7 @@ interface CertificateData {
   instructorName: string;
   studentId: string;
   courseId: string;
+  certificateHash: string;
 }
 
 class CertificateService {
@@ -26,19 +28,25 @@ class CertificateService {
     return CertificateService.instance;
   }
 
-  async generateCertificate(data: Omit<CertificateData, 'id'>): Promise<CertificateData> {
+  async generateCertificate(data: Omit<CertificateData, 'id' | 'certificateHash'>): Promise<CertificateData> {
     const certificateId = uuidv4();
+    
+    // Generate a unique hash for the certificate
+    const hashData = `${data.studentName}-${data.courseName}-${data.completionDate}-${data.instructorName}-${data.studentId}-${data.courseId}`;
+    const certificateHash = ethers.keccak256(ethers.toUtf8Bytes(hashData));
+    
     const certificate: CertificateData = {
       ...data,
       id: certificateId,
+      certificateHash,
     };
 
     await this.db.execute('INSERT', 'certificates', certificate);
     return certificate;
   }
 
-  async validateCertificate(certificateId: string): Promise<CertificateData | null> {
-    const certificates = await this.db.query('certificates', { id: certificateId });
+  async validateCertificate(certificateHash: string): Promise<CertificateData | null> {
+    const certificates = await this.db.query('certificates', { certificateHash });
     return certificates[0] || null;
   }
 

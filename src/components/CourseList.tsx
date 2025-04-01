@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import StripeWrapper from './StripeWrapper';
 
 interface Course {
   id: number;
@@ -23,6 +24,8 @@ const CourseList = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedLevel, setSelectedLevel] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [showPayment, setShowPayment] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const totalPages = 8;
 
   const categories = [
@@ -177,6 +180,12 @@ const CourseList = () => {
     return matchesCategory && matchesLevel && matchesSearch;
   });
 
+  const handleEnrollClick = (course: Course) => {
+    console.log('Enroll button clicked for course:', course.title);
+    setSelectedCourse(course);
+    setShowPayment(true);
+  };
+
   return (
     <div className="bg-white min-h-screen py-12">
       <div className="max-w-[1400px] mx-auto px-8">
@@ -302,7 +311,10 @@ const CourseList = () => {
                     <span className="text-2xl font-bold">${course.price}</span>
                     <span className="text-sm text-gray-600 line-through ml-2">${course.originalPrice}</span>
                   </div>
-                  <button className="px-4 py-2 bg-[#FF4D4D] text-white rounded-lg font-medium hover:bg-[#ff3333] transition-colors">
+                  <button 
+                    onClick={() => handleEnrollClick(course)}
+                    className="px-4 py-2 bg-[#FF4D4D] text-white rounded-lg font-medium hover:bg-[#ff3333] transition-colors"
+                  >
                     Enroll Now
                   </button>
                 </div>
@@ -354,6 +366,28 @@ const CourseList = () => {
           </div>
         </div>
       </div>
+
+      {showPayment && selectedCourse && (
+        <StripeWrapper
+          course={{
+            id: selectedCourse.id.toString(),
+            title: selectedCourse.title,
+            description: `${selectedCourse.title} - ${selectedCourse.category} course by ${selectedCourse.instructor}`,
+            image: '', // You might want to add an image property to your Course interface
+            price: selectedCourse.price
+          }}
+          onClose={() => {
+            console.log('Closing payment modal');
+            setShowPayment(false);
+            setSelectedCourse(null);
+          }}
+          onSuccess={() => {
+            console.log('Payment successful for course:', selectedCourse.title);
+            setShowPayment(false);
+            setSelectedCourse(null);
+          }}
+        />
+      )}
     </div>
   );
 };

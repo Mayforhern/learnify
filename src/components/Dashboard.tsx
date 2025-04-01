@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import DatabaseService from '../services/DatabaseService';
 
 interface DashboardProps {
@@ -42,13 +42,22 @@ interface TimeTableEntry {
   participants: number;
 }
 
-const Dashboard = ({ userAddress }: DashboardProps) => {
+interface MenuItem {
+  id: string;
+  label: string;
+  icon: JSX.Element;
+  notifications?: number;
+}
+
+const Dashboard: React.FC<DashboardProps> = ({ userAddress }) => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [events, setEvents] = useState<Event[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [timetable, setTimetable] = useState<TimeTableEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [activeSection, setActiveSection] = useState('lessons');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadDashboardData = async () => {
@@ -140,6 +149,207 @@ const Dashboard = ({ userAddress }: DashboardProps) => {
   const reviewTasks = tasks.filter(task => task.status === 'review');
   const completedTasks = tasks.filter(task => task.status === 'completed');
 
+  const menuItems: MenuItem[] = [
+    {
+      id: 'lessons',
+      label: 'Lessons',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+        </svg>
+      )
+    },
+    {
+      id: 'timetable',
+      label: 'Timetable',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+      )
+    },
+    {
+      id: 'homework',
+      label: 'Homework',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+        </svg>
+      )
+    },
+    {
+      id: 'messages',
+      label: 'Messages',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+        </svg>
+      )
+    },
+    {
+      id: 'assessments',
+      label: 'Assessments',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+        </svg>
+      ),
+      notifications: 1
+    }
+  ];
+
+  const supportItems: MenuItem[] = [
+    {
+      id: 'support',
+      label: 'Support',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+      )
+    },
+    {
+      id: 'settings',
+      label: 'Settings',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+      )
+    }
+  ];
+
+  const renderContent = () => {
+    switch (activeSection) {
+      case 'lessons':
+        return (
+          <div className="p-6">
+            <h2 className="text-2xl font-bold mb-6">My Lessons</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3].map((lesson) => (
+                <div key={lesson} className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                  <h3 className="text-lg font-semibold mb-2">Lesson {lesson}</h3>
+                  <p className="text-gray-600 mb-4">Next class: Today, 2:00 PM</p>
+                  <button className="text-blue-600 hover:text-blue-800">Join Class</button>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+
+      case 'timetable':
+        return (
+          <div className="p-6">
+            <h2 className="text-2xl font-bold mb-6">Timetable</h2>
+            <div className="bg-white rounded-lg shadow-sm border border-gray-100">
+              {/* Weekly calendar grid */}
+              <div className="grid grid-cols-7 gap-px bg-gray-200">
+                {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
+                  <div key={day} className="bg-gray-50 p-4 text-center font-medium">
+                    {day}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'homework':
+        return (
+          <div className="p-6">
+            <h2 className="text-2xl font-bold mb-6">Homework</h2>
+            <div className="space-y-4">
+              {[1, 2, 3].map((homework) => (
+                <div key={homework} className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                  <h3 className="text-lg font-semibold mb-2">Assignment {homework}</h3>
+                  <p className="text-gray-600 mb-4">Due: In 3 days</p>
+                  <button className="text-blue-600 hover:text-blue-800">Submit</button>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+
+      case 'messages':
+        return (
+          <div className="p-6">
+            <h2 className="text-2xl font-bold mb-6">Messages</h2>
+            <div className="bg-white rounded-lg shadow-sm border border-gray-100">
+              <div className="divide-y">
+                {[1, 2, 3].map((message) => (
+                  <div key={message} className="p-4 hover:bg-gray-50">
+                    <h3 className="font-medium">Instructor {message}</h3>
+                    <p className="text-gray-600">Message preview...</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'assessments':
+        return (
+          <div className="p-6">
+            <h2 className="text-2xl font-bold mb-6">Assessments</h2>
+            <div className="space-y-4">
+              {[1, 2, 3].map((assessment) => (
+                <div key={assessment} className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                  <h3 className="text-lg font-semibold mb-2">Quiz {assessment}</h3>
+                  <p className="text-gray-600 mb-4">Duration: 30 minutes</p>
+                  <button className="text-blue-600 hover:text-blue-800">Start Quiz</button>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+
+      case 'support':
+        return (
+          <div className="p-6">
+            <h2 className="text-2xl font-bold mb-6">Support</h2>
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+              <h3 className="text-lg font-semibold mb-4">Need Help?</h3>
+              <p className="text-gray-600 mb-4">Contact our support team for assistance.</p>
+              <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                Contact Support
+              </button>
+            </div>
+          </div>
+        );
+
+      case 'settings':
+        return (
+          <div className="p-6">
+            <h2 className="text-2xl font-bold mb-6">Settings</h2>
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Notifications</label>
+                  <div className="mt-2">
+                    <label className="inline-flex items-center">
+                      <input type="checkbox" className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
+                      <span className="ml-2">Email notifications</span>
+                    </label>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Theme</label>
+                  <select className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                    <option>Light</option>
+                    <option>Dark</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#f7f7f5] flex items-center justify-center">
@@ -149,276 +359,56 @@ const Dashboard = ({ userAddress }: DashboardProps) => {
   }
 
   return (
-    <div className="min-h-screen bg-[#f7f7f5]">
-      {/* Left Sidebar */}
-      <div className="fixed left-0 top-0 h-screen w-[240px] bg-[#151313] py-6">
-        <div className="px-6 mb-8">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-[#ff5734] rounded-lg flex items-center justify-center">
-              <span className="text-white text-lg font-bold">L</span>
-            </div>
-            <span className="text-xl font-bold text-white">
-              <span className="text-[#ff5734]">Learn</span>ify
-            </span>
-          </Link>
+    <div className="flex h-screen bg-gray-100">
+      {/* Sidebar */}
+      <div className="w-64 bg-white border-r border-gray-200">
+        <div className="p-6">
+          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
         </div>
-
-        <nav className="space-y-1">
-          <Link to="/" className="flex items-center gap-3 px-6 py-3 bg-[#be94f5] bg-opacity-20 text-[#be94f5] font-medium">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path d="M3 10L10 3L17 10L17 17H13V12H7V17H3V10Z" stroke="currentColor" strokeWidth="2"/>
-            </svg>
-            Home
-          </Link>
-          <Link to="/lessons" className="flex items-center gap-3 px-6 py-3 text-gray-600 hover:bg-gray-50">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path d="M4 4H16V16H4V4Z M8 8H12M8 12H12" stroke="currentColor" strokeWidth="2"/>
-            </svg>
-            Lessons
-          </Link>
-          <Link to="/timetable" className="flex items-center gap-3 px-6 py-3 text-gray-600 hover:bg-gray-50">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path d="M4 4H16V16H4V4ZM4 8H16M8 8V16" stroke="currentColor" strokeWidth="2"/>
-            </svg>
-            Timetable
-          </Link>
-          <Link to="/homework" className="flex items-center gap-3 px-6 py-3 text-gray-600 hover:bg-gray-50">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path d="M6 4H14L17 7V16H3V7L6 4Z M7 8H13M7 12H13" stroke="currentColor" strokeWidth="2"/>
-            </svg>
-            Homework
-          </Link>
-          <Link to="/messages" className="flex items-center gap-3 px-6 py-3 text-gray-600 hover:bg-gray-50">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path d="M4 4H16V13H6L4 15V4Z M8 8H12M8 11H12" stroke="currentColor" strokeWidth="2"/>
-            </svg>
-            Messages
-          </Link>
-          <Link to="/assessments" className="flex items-center gap-3 px-6 py-3 text-gray-600 hover:bg-gray-50">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path d="M4 4H16V16H4V4Z M7 9L9 11L13 7" stroke="currentColor" strokeWidth="2"/>
-            </svg>
-            Assessments
-            <span className="ml-auto bg-blue-600 text-white text-xs px-1.5 py-0.5 rounded-full">1</span>
-          </Link>
+        
+        <nav className="px-4 space-y-1">
+          {menuItems.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => setActiveSection(item.id)}
+              className={`flex items-center w-full px-4 py-2 text-sm font-medium rounded-lg ${
+                activeSection === item.id
+                  ? 'text-blue-700 bg-blue-50'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              }`}
+            >
+              {item.icon}
+              <span className="ml-3">{item.label}</span>
+              {item.notifications && (
+                <span className="ml-auto bg-blue-600 text-white text-xs font-semibold px-2 py-0.5 rounded-full">
+                  {item.notifications}
+                </span>
+              )}
+            </button>
+          ))}
         </nav>
 
-        <div className="absolute bottom-6 left-0 w-full px-6">
-          <Link to="/support" className="flex items-center gap-3 text-gray-600 hover:text-gray-900">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path d="M10 17C14.4183 17 18 13.4183 18 9C18 4.58172 14.4183 1 10 1C5.58172 1 2 4.58172 2 9C2 10.8214 2.48697 12.5291 3.33782 14L2.5 17.5L6 16.6622C7.47087 17.513 9.17855 18 11 18H17" stroke="currentColor" strokeWidth="2"/>
-            </svg>
-            Support
-          </Link>
-          <Link to="/settings" className="flex items-center gap-3 text-gray-600 hover:text-gray-900 mt-4">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path d="M8 4L8 2M8 8L8 16M12 4L12 12M12 16L12 14" stroke="currentColor" strokeWidth="2"/>
-              <circle cx="8" cy="6" r="2" stroke="currentColor" strokeWidth="2"/>
-              <circle cx="12" cy="14" r="2" stroke="currentColor" strokeWidth="2"/>
-            </svg>
-            Settings
-          </Link>
+        <div className="mt-auto px-4 py-6">
+          {supportItems.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => setActiveSection(item.id)}
+              className={`flex items-center w-full px-4 py-2 text-sm font-medium rounded-lg mb-2 ${
+                activeSection === item.id
+                  ? 'text-blue-700 bg-blue-50'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              }`}
+            >
+              {item.icon}
+              <span className="ml-3">{item.label}</span>
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="ml-[240px] p-8">
-        {/* Welcome Banner */}
-        <div className="bg-[#ff5734] rounded-[24px] p-6 text-white mb-8 relative overflow-hidden">
-          <div className="relative z-10">
-            <h1 className="text-2xl font-bold mb-2">
-              Welcome back, {profile?.display_name || 'User'} 👋
-            </h1>
-            <p className="text-white/80">
-              You've learned <span className="font-semibold">{profile?.weekly_goal_progress || 0}%</span> of your goal this week!<br />
-              Keep it up and improve your progress.
-            </p>
-          </div>
-          <div className="absolute right-6 bottom-0">
-            <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
-              {/* Add your mascot SVG here */}
-            </svg>
-          </div>
-        </div>
-
-        {/* Stats Grid */}
-        <div className="grid grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-[24px] p-6 border border-gray-100">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-10 h-10 bg-[#be94f5] bg-opacity-20 rounded-full flex items-center justify-center">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#be94f5" className="text-[#be94f5]">
-                  <path d="M10 12C12.2091 12 14 10.2091 14 8C14 5.79086 12.2091 4 10 4C7.79086 4 6 5.79086 6 8C6 10.2091 7.79086 12 10 12Z" strokeWidth="2"/>
-                </svg>
-              </div>
-              <div>
-                <div className="text-sm text-gray-600">Attendance</div>
-                <div className="text-2xl font-bold">{profile?.attendance || 0}/{profile?.total_attendance || 0}</div>
-              </div>
-            </div>
-            <p className="text-sm text-gray-600">
-              {profile?.attendance === profile?.total_attendance 
-                ? 'Perfect attendance! Keep it up!' 
-                : 'Keep working on your attendance'}
-            </p>
-          </div>
-
-          <div className="bg-white rounded-[24px] p-6 border border-gray-100">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-10 h-10 bg-[#fccc42] bg-opacity-20 rounded-full flex items-center justify-center">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#fccc42" className="text-[#fccc42]">
-                  <path d="M6 4H14L17 7V16H3V7L6 4Z M7 8H13M7 12H13" strokeWidth="2"/>
-                </svg>
-              </div>
-              <div>
-                <div className="text-sm text-gray-600">Homework</div>
-                <div className="text-2xl font-bold">{profile?.homework_completed || 0}/{profile?.total_homework || 0}</div>
-              </div>
-            </div>
-            <p className="text-sm text-gray-600">
-              {todoTasks.length > 0 
-                ? `${todoTasks.length} tasks pending completion` 
-                : 'All caught up with homework!'}
-            </p>
-          </div>
-
-          <div className="bg-white rounded-[24px] p-6 border border-gray-100">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-10 h-10 bg-[#ff5734] bg-opacity-20 rounded-full flex items-center justify-center">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#ff5734" className="text-[#ff5734]">
-                  <path d="M10 15L4 9L10 3M16 15L10 9L16 3" strokeWidth="2"/>
-                </svg>
-              </div>
-              <div>
-                <div className="text-sm text-gray-600">Rating</div>
-                <div className="text-2xl font-bold">{profile?.rating || 0}/{profile?.max_rating || 100}</div>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="inline-block px-2 py-1 bg-[#be94f5] bg-opacity-20 text-[#be94f5] text-xs font-medium rounded-full">
-                {(profile?.rating || 0) >= 80 ? 'Outstanding' : (profile?.rating || 0) >= 60 ? 'Good' : 'Needs Improvement'}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-8">
-          {/* Left Column */}
-          <div>
-            {/* Timetable Section */}
-            <div className="bg-white rounded-[24px] p-6 border border-gray-100 mb-8">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-semibold">Timetable</h2>
-                <div className="text-sm text-gray-600">
-                  {new Date().toLocaleDateString('en-US', { 
-                    month: 'short',
-                    day: 'numeric',
-                    year: 'numeric'
-                  })}
-                </div>
-              </div>
-              
-              <div className="space-y-4">
-                {timetable.map(entry => (
-                  <div key={entry.id} className={`border-l-2 border-[${entry.subject_color}] pl-4`}>
-                    <div className="text-sm text-gray-600">{entry.time}</div>
-                    <div className="font-medium">{entry.title}</div>
-                    <div className="flex items-center gap-1 mt-1">
-                      {[...Array(entry.participants)].map((_, i) => (
-                        <div key={i} className="w-6 h-6 rounded-full bg-gray-100 -ml-2 first:ml-0"></div>
-                      ))}
-                      <span className={`text-xs bg-[${entry.subject_color}] bg-opacity-10 text-[${entry.subject_color}] px-2 py-0.5 rounded-full ml-2`}>
-                        {entry.subject}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Upcoming Events */}
-            <div className="bg-white rounded-[24px] p-6 border border-gray-100">
-              <h2 className="text-lg font-semibold mb-6">Upcoming events</h2>
-              <div className="space-y-4">
-                {events.map(event => (
-                  <div key={event.id} className="group relative rounded-2xl overflow-hidden">
-                    <img src={event.image} alt={event.title} className="w-full h-32 object-cover" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent p-4 flex flex-col justify-end">
-                      <h3 className="text-white font-medium">{event.title}</h3>
-                      <p className="text-white/80 text-sm">{event.date}</p>
-                    </div>
-                    <button className="absolute top-4 right-4 bg-white/90 hover:bg-white text-[#151313] px-4 py-1 rounded-full text-sm opacity-0 group-hover:opacity-100 transition-opacity">
-                      More details
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column - Homework Progress */}
-          <div className="bg-white rounded-[24px] p-6 border border-gray-100">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-semibold">Homework progress</h2>
-              <select className="text-sm border-none bg-transparent">
-                <option>All</option>
-                <option>To do</option>
-                <option>Completed</option>
-              </select>
-            </div>
-
-            {/* To do */}
-            <div className="mb-8">
-              <h3 className="text-sm font-medium mb-4">To do ({todoTasks.length})</h3>
-              <div className="space-y-4">
-                {todoTasks.map(task => (
-                  <div key={task.id} className="flex items-start gap-4">
-                    <div className="w-4 h-4 mt-1 rounded-full border-2 border-[#be94f5]"></div>
-                    <div>
-                      <div className="font-medium">{task.title}</div>
-                      <div className="text-sm text-gray-600">Deadline: {task.deadline}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* On review */}
-            <div className="mb-8">
-              <h3 className="text-sm font-medium mb-4">On review ({reviewTasks.length})</h3>
-              <div className="space-y-4">
-                {reviewTasks.map(task => (
-                  <div key={task.id} className="flex items-start gap-4">
-                    <div className="w-4 h-4 mt-1 rounded-full border-2 border-[#fccc42] bg-[#fccc42] bg-opacity-10"></div>
-                    <div>
-                      <div className="font-medium">{task.title}</div>
-                      <div className="text-sm text-gray-600">Deadline: {task.deadline}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Completed */}
-            <div>
-              <h3 className="text-sm font-medium mb-4">Completed ({completedTasks.length})</h3>
-              <div className="space-y-4">
-                {completedTasks.map(task => (
-                  <div key={task.id} className="flex items-start gap-4">
-                    <div className="w-4 h-4 mt-1 rounded-full border-2 border-[#ff5734] bg-[#ff5734] bg-opacity-10">
-                      <svg viewBox="0 0 16 16" className="w-full h-full text-[#ff5734]">
-                        <path d="M4 8L7 11L12 5" stroke="currentColor" strokeWidth="2" fill="none"/>
-                      </svg>
-                    </div>
-                    <div>
-                      <div className="font-medium">{task.title}</div>
-                      <div className="text-sm text-gray-600">Completed: {task.completion_date}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
+      {/* Main content */}
+      <div className="flex-1 overflow-auto">
+        {renderContent()}
       </div>
     </div>
   );

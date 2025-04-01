@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import StripeService, { Course } from '../services/StripeService';
 import WalletService, { WalletBalance } from '../services/WalletService';
+import UserCourseService from '../services/UserCourseService';
 import { InjectedConnector } from '@web3-react/injected-connector';
 
 interface PaymentModalProps {
@@ -19,28 +20,73 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ course, onClose, onSuccess 
   const [walletBalance, setWalletBalance] = useState<WalletBalance | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isConnectingWallet, setIsConnectingWallet] = useState(false);
 
   const stripeService = StripeService.getInstance();
   const walletService = WalletService.getInstance();
+  const userCourseService = UserCourseService.getInstance();
 
+  // Initialize wallet connection when component mounts
   useEffect(() => {
-    const loadWalletBalance = async () => {
+    let isMounted = true;
+
+    const initializeWallet = async () => {
       try {
+        setIsConnectingWallet(true);
         const connector = new InjectedConnector({
-          supportedChainIds: [1, 3, 4, 5, 42],
+          supportedChainIds: [1, 3, 4, 5, 42, 31337],
         });
-        await walletService.connect(connector);
-        const balance = await walletService.getBalance();
-        setWalletBalance(balance);
+        
+        // Check if already connected
+        const isConnected = await walletService.isConnected();
+        if (!isConnected) {
+          await walletService.connect(connector);
+        }
+        
+        if (isMounted) {
+          const balance = await walletService.getBalance();
+          setWalletBalance(balance);
+        }
       } catch (error) {
-        console.error('Error loading wallet balance:', error);
+        console.error('Error initializing wallet:', error);
+        if (isMounted) {
+          setError('Failed to connect wallet. Please try again.');
+        }
+      } finally {
+        if (isMounted) {
+          setIsConnectingWallet(false);
+        }
       }
     };
 
-    if (paymentMethod === 'wallet') {
-      loadWalletBalance();
+    initializeWallet();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const handlePaymentSuccess = () => {
+    try {
+      // Get the user's wallet address
+      const userAddress = localStorage.getItem('walletAddress');
+      if (!userAddress) {
+        setError('Wallet address not found. Please reconnect your wallet.');
+        return;
+      }
+
+      // Add the course to user's courses
+      userCourseService.addCourse(parseInt(course.id), userAddress);
+
+      // Show success message
+      console.log('Course added to My Courses:', course.title);
+      onSuccess();
+      onClose();
+    } catch (error) {
+      console.error('Error adding course to My Courses:', error);
+      setError('Payment successful but failed to add course. Please contact support.');
     }
-  }, [paymentMethod]);
+  };
 
   const handleStripePayment = async () => {
     if (!stripe || !elements) {
@@ -62,8 +108,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ course, onClose, onSuccess 
 
       const { clientSecret } = await stripeService.createPaymentIntent(course.id);
       await stripeService.confirmPayment(clientSecret);
-      onSuccess();
-      onClose();
+      handlePaymentSuccess();
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Payment failed');
     } finally {
@@ -81,18 +126,21 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ course, onClose, onSuccess 
     setError(null);
 
     try {
-      // Convert course price to ETH (you'll need to implement this)
-      const ethAmount = course.price / walletBalance.usd;
+      // Convert course price to ETH with proper decimal handling
+      const ethAmount = (course.price / walletBalance.usd).toFixed(18); // Fix to 18 decimals (standard for ETH)
+      console.log('Course price in USD:', course.price);
+      console.log('ETH/USD rate:', walletBalance.usd);
+      console.log('ETH amount to send:', ethAmount);
       
-      // Send transaction to your contract address
+      // Send transaction to the course payment address
       await walletService.sendTransaction(
-        'YOUR_CONTRACT_ADDRESS',
-        ethAmount.toString()
+        '0x70997970C51812dc3A010C7d01b50e0d17dc79C8', // Course payment address
+        ethAmount
       );
       
-      onSuccess();
-      onClose();
+      handlePaymentSuccess();
     } catch (error) {
+      console.error('Payment error:', error);
       setError(error instanceof Error ? error.message : 'Payment failed');
     } finally {
       setIsLoading(false);
@@ -155,7 +203,12 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ course, onClose, onSuccess 
             </div>
           ) : (
             <div className="border rounded p-4">
-              {walletBalance ? (
+              {isConnectingWallet ? (
+                <div className="flex items-center justify-center space-x-2">
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
+                  <span className="text-gray-600">Connecting wallet...</span>
+                </div>
+              ) : walletBalance ? (
                 <div>
                   <p className="text-sm text-gray-600">Wallet Balance:</p>
                   <p className="text-lg font-semibold">
@@ -163,7 +216,15 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ course, onClose, onSuccess 
                   </p>
                 </div>
               ) : (
-                <p className="text-gray-600">Connecting wallet...</p>
+                <div className="text-center">
+                  <p className="text-red-600 mb-2">Failed to connect wallet</p>
+                  <button
+                    onClick={() => window.location.reload()}
+                    className="text-blue-600 hover:text-blue-800"
+                  >
+                    Try Again
+                  </button>
+                </div>
               )}
             </div>
           )}
@@ -184,7 +245,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ course, onClose, onSuccess 
           <button
             className="flex-1 py-2 px-4 bg-blue-600 text-white rounded"
             onClick={paymentMethod === 'stripe' ? handleStripePayment : handleWalletPayment}
-            disabled={isLoading}
+            disabled={isLoading || (paymentMethod === 'wallet' && !walletBalance)}
           >
             {isLoading ? 'Processing...' : 'Pay Now'}
           </button>

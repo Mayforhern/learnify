@@ -73,8 +73,8 @@ const CourseProgress: React.FC<CourseProgressProps> = ({
             studentName={certificate.studentName}
             courseName={certificate.courseName}
             completionDate={certificate.completionDate}
-            certificateId={certificate.id}
             instructorName={certificate.instructorName}
+            certificateHash={certificate.certificateHash}
           />
         </div>
       )}

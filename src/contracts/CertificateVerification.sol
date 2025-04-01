@@ -58,11 +58,23 @@ contract CertificateVerification {
         emit CertificateRevoked(_certificateHash);
     }
 
-    function verifyCertificate(bytes32 _certificateHash) public view returns (bool) {
+    function verifyCertificate(bytes32 _certificateHash) public view returns (
+        string memory recipientName,
+        string memory courseName,
+        uint256 issueDate,
+        string memory issuerName,
+        bool isValid
+    ) {
         Certificate memory cert = certificates[_certificateHash];
         require(cert.issueDate != 0, "Certificate does not exist");
         emit CertificateVerified(_certificateHash, cert.isValid);
-        return cert.isValid;
+        return (
+            cert.recipientName,
+            cert.courseName,
+            cert.issueDate,
+            cert.issuerName,
+            cert.isValid
+        );
     }
 
     function getCertificate(bytes32 _certificateHash) public view returns (

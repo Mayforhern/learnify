@@ -39,15 +39,18 @@ const Web3Auth = ({ onConnect, onDisconnect }: Web3AuthProps) => {
       const address = await signer.getAddress();
       
       setAccount(address);
+      localStorage.setItem('walletAddress', address);
       onConnect(address);
 
       // Subscribe to accounts change
       instance.on("accountsChanged", (accounts: string[]) => {
         if (accounts.length > 0) {
           setAccount(accounts[0]);
+          localStorage.setItem('walletAddress', accounts[0]);
           onConnect(accounts[0]);
         } else {
           setAccount(null);
+          localStorage.removeItem('walletAddress');
           onDisconnect();
         }
       });
@@ -70,6 +73,7 @@ const Web3Auth = ({ onConnect, onDisconnect }: Web3AuthProps) => {
     if (web3Modal) {
       web3Modal.clearCachedProvider();
       setAccount(null);
+      localStorage.removeItem('walletAddress');
       onDisconnect();
     }
   };
