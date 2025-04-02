@@ -76,14 +76,3 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## 📄 License
 
 MIT License - feel free to use this project for your own purposes.
-
-## 🎨 Screenshots
-
-### Platform Overview
-![Learnify Platform](public/image.png)
-
-### Interactive Dashboard
-[Coming Soon - Add dashboard screenshot]
-
-### Course Interface
-[Coming Soon - Add course interface screenshot]
